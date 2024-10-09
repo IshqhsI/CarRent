@@ -57,7 +57,7 @@ class BrandController extends Controller
         $data = $request->all();
         $data['slug'] = Str::lower(Str::slug($request->name) . '-' . Str::random(5));
         Brand::create($data);
-        return redirect()->route('admin.brand.index');
+        return redirect()->route('admin.brand.index')->with('success', 'Brand created successfully');
     }
 
     /**
@@ -83,7 +83,7 @@ class BrandController extends Controller
     {
         $data = $request->all();
         $brand->update($data);
-        return redirect()->route('admin.brand.index');
+        return redirect()->route('admin.brand.index')->with('success', 'Brand updated successfully');
     }
 
     /**
