@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Type;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Http\Requests\TypeRequest;
 use App\Http\Controllers\Controller;
 
 class TypeController extends Controller
@@ -46,9 +48,12 @@ class TypeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TypeRequest $request)
     {
-        //
+        $data = $request->all();
+        $data['slug'] = Str::lower(Str::slug($request->name) . '-' . Str::random(5));
+        Type::create($data);
+        return redirect()->route('admin.type.index')->with('success', 'Type created successfully');
     }
 
     /**
