@@ -75,9 +75,11 @@ class TypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TypeRequest $request, Type $type)
     {
-        //
+        $data = $request->all();
+        $type->update($data);
+        return redirect()->route('admin.type.index')->with('success', 'Type updated successfully');
     }
 
     /**
