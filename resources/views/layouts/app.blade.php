@@ -37,28 +37,6 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    {{-- Sweetalert if error exist --}}
-    @if (session()->has('error'))
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: '{{ session('error') }}',
-            })
-        </script>
-    @endif
-
-    {{-- Sweetalert if success exist --}}
-    @if (session()->has('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: '{{ session('success') }}',
-            })
-        </script>
-    @endif
-
     <!-- Styles -->
     <style>
         /*Form fields*/
@@ -167,6 +145,11 @@
             text-align: center;
             text-shadow: rgb(176, 190, 217) 1px 1px, rgb(176, 190, 217) -1px -1px, rgb(176, 190, 217) 1px -1px, rgb(176, 190, 217) -1px 1px;
         }
+
+        /* styling sweet alert */
+        div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm){
+            background-color: #7066e0 !important;
+        }
     </style>
     @livewireStyles
 </head>
@@ -197,6 +180,28 @@
     @livewireScripts
 
     {{ $script ?? '' }}
-</body>
 
+
+    {{-- Sweetalert if error exist --}}
+    @if (session()->has('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '{{ session('error') }}',
+            })
+        </script>
+    @endif
+
+    {{-- Sweetalert if success exist --}}
+    @if (session()->has('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success') }}',
+            })
+        </script>
+    @endif
+</body>
 </html>
