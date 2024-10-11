@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Type;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -14,7 +16,7 @@ class ItemController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $query = Item::query();
+            $query = Item::query()->with(['brand', 'type']);
             return DataTables::of($query)
                 ->addColumn(
                     'action',
@@ -41,7 +43,9 @@ class ItemController extends Controller
      */
     public function create()
     {
-        //
+        $brands = Brand::all();
+        $types = Type::all();
+        return view('admin.item.create', compact('brands', 'types'));
     }
 
     /**
