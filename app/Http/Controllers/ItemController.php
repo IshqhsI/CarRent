@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\Type;
 use App\Models\Brand;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Http\Requests\ItemRequest;
 
 class ItemController extends Controller
 {
@@ -51,9 +53,25 @@ class ItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ItemRequest $request)
     {
-        //
+        $data = $request->all();
+        try {
+            $data['slug'] = Str::slug($request->name . '-' . Str::lower(Str::random(5)));
+            // Store Images
+            if ($request->hasFile('images')) {
+                $images = [];
+                foreach ($request->images as $image) {
+                    $imgPath = $image->store('assets/item', 'public');
+                    array_push($images, $imgPath);
+                }
+                $data['images'] = json_encode($images);
+            }
+            Item::create($data);
+            return redirect()->route('admin.item.index')->with('success', 'Item created successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
