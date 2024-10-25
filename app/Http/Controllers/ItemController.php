@@ -88,17 +88,37 @@ class ItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Item $item)
     {
-        //
+        $brands = Brand::all();
+        $types = Type::all();
+        return view('admin.item.edit', compact('item', 'brands', 'types'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ItemRequest $request, Item $item)
     {
-        //
+        $data = $request->all();
+        try {
+            $data['slug'] = Str::slug($request->name . '-' . Str::lower(Str::random(5)));
+            // Store Images
+            if ($request->hasFile('images')) {
+                $images = [];
+                foreach ($request->images as $image) {
+                    $imgPath = $image->store('assets/item', 'public');
+                    array_push($images, $imgPath);
+                }
+                $data['images'] = json_encode($images);
+            } else {
+                $data['images'] = $item->images;
+            }
+            $item->update($data);
+            return redirect()->route('admin.item.index')->with('success', 'Item updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
