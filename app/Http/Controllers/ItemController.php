@@ -20,6 +20,9 @@ class ItemController extends Controller
         if (request()->ajax()) {
             $query = Item::query()->with(['brand', 'type']);
             return DataTables::of($query)
+                ->editColumn('thumbnail', function ($item) {
+                    return '<img src="' . $item->thumbnail . '" alt="" class="w-20 rounded-md"> ';
+                })
                 ->addColumn(
                     'action',
                     function ($item) {
@@ -34,7 +37,7 @@ class ItemController extends Controller
                     ';
                     }
                 )
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'thumbnail'])
                 ->make();
         }
         return view('admin.item.index');
