@@ -5,12 +5,12 @@
             <a href="#!" onclick="window.history.go(-1); return false;">
                 ←
             </a>
-            {!! __('Item &raquo; Buat') !!}
+            {!! __('Item &raquo; Sunting &raquo; #') . $item->id . ' &middot; ' . $item->name !!}
         </h2>
     </x-slot>
 
-    <div class="py-8 lg:py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div>
                 @if ($errors->any())
                     <div class="mb-5" role="alert">
@@ -30,16 +30,17 @@
                 @endif
 
                 {{-- Form --}}
-                <form class="w-full" action="{{ route('admin.item.store') }}" method="post"
+                <form class="w-full" action="{{ route('admin.item.update', $item->id) }}" method="post"
                     enctype="multipart/form-data">
                     @csrf
+                    @method('put')
                     <div class="flex flex-wrap px-3 mt-4 mb-6 -mx-3">
                         <div class="w-full">
                             <label class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
                                 for="name">
                                 Nama*
                             </label>
-                            <input value="{{ old('name') }}" name="name"
+                            <input value="{{ old('name') ?? $item->name }}" name="name"
                                 class="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
                                 id="name" type="text" placeholder="Nama" required>
                             <div class="mt-2 text-sm text-gray-500">
@@ -60,7 +61,7 @@
                                 <option value="">-- Pilih Tipe --</option>
                                 @foreach ($types as $type)
                                     <option value="{{ $type->id }}"
-                                        {{ old('type_id') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                                        {{ (old('type_id') == $type->id || $item->type_id == $type->id) ? 'selected' : '' }}>{{ $type->name }}</option>
                                 @endforeach
                             </select>
                             <div class="mt-2 text-sm text-gray-500">
@@ -81,7 +82,7 @@
                                 <option value="">-- Pilih Brand --</option>
                                 @foreach ($brands as $brand)
                                     <option value="{{ $brand->id }}"
-                                        {{ old('brand_id') == $brand->id ? 'selected' : '' }}>{{ $brand->name }}
+                                        {{ (old('brand_id') == $brand->id || $item->brand_id == $brand->id) ? 'selected' : '' }}>{{ $brand->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -97,7 +98,7 @@
                                 for="features">
                                 Fitur*
                             </label>
-                            <input value="{{ old('features') }}" name="features"
+                            <input value="{{ old('features') ?? $item->features }}" name="features"
                                 class="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
                                 id="features" type="text" placeholder="Fitur" required>
                             <div class="mt-2 text-sm text-gray-500">
@@ -106,7 +107,7 @@
                         </div>
                     </div>
 
-                    {{-- images multiple, boleh ebih ari 1, opsional --}}
+                    {{-- images multiple, boleh lebih dari 1, opsional --}}
                     <div class="flex flex-wrap px-3 mt-4 mb-6 -mx-3">
                         <div class="w-full">
                             <label class="block mb-2 text-xs font-bold tracking-wide text-gray-700 uppercase"
@@ -128,7 +129,7 @@
                                 for="price">
                                 Harga
                             </label>
-                            <input value="{{ old('price') }}" name="price"
+                            <input value="{{ old('price') ?? $item->price }}" name="price"
                                 class="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
                                 id="price" type="number" placeholder="Harga" required>
                             <div class="mt-2 text-sm text-gray-500">
@@ -140,7 +141,7 @@
                                 for="rating">
                                 Rating
                             </label>
-                            <input value="{{ old('stars') }}" name="stars"
+                            <input value="{{ old('stars')  ?? $item->stars }}" name="stars"
                                 class="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
                                 id="rating" type="number" placeholder="Rating" min="1" max="5"
                                 step=".01">
@@ -153,7 +154,7 @@
                                 for="total-review">
                                 Total Review
                             </label>
-                            <input value="{{ old('reviews') }}" name="reviews"
+                            <input value="{{ old('reviews') ?? $item->reviews }}" name="reviews"
                                 class="block w-full px-4 py-3 leading-tight text-gray-700 bg-gray-200 border border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-gray-500"
                                 id="total-review" type="number" placeholder="Total Review">
                             <div class="mt-2 text-sm text-gray-500">
