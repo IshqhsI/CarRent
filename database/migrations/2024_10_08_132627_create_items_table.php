@@ -18,8 +18,8 @@ return new class extends Migration
             $table->text('features')->nullable();
             $table->text('images')->nullable();
             $table->integer('price')->default(0);
-            $table->double('stars')->default(0);
-            $table->double('reviews')->default(0);
+            $table->double('stars')->nullable()->default(0);
+            $table->double('reviews')->nullable()->default(0);
             $table->foreignId('type_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('brand_id')->nullable()->constrained()->nullOnDelete();
             $table->softDeletes();
