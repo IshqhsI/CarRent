@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\isAdmin;
 use Laravel\Jetstream\Features;
 use Laravel\Jetstream\Http\Middleware\AuthenticateSession;
 
@@ -32,6 +33,7 @@ return [
     'middleware' => ['web'],
 
     'auth_session' => AuthenticateSession::class,
+    'is_admin' => isAdmin::class,
 
     /*
     |--------------------------------------------------------------------------
