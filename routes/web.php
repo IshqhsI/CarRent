@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\LandingController;
+use App\Http\Controllers\Front\PaymentController;
 use App\Http\Controllers\Front\CheckoutController;
 use App\Http\Controllers\Admin\ItemController as AdminItemController;
 use App\Http\Controllers\Admin\TypeController as AdminTypeController;
@@ -16,6 +17,9 @@ Route::name('front.')->group(function () {
     Route::group(['middleware' => 'auth'], function () {
         Route::get('/checkout/{slug}', [CheckoutController::class, 'index'])->name('checkout');
         Route::post('/checkout/{slug}', [CheckoutController::class, 'store'])->name('checkout.store');
+
+        Route::get('/payment/{bookingId}', [PaymentController::class, 'index'])->name('payment');
+        Route::post('/payment/{bookingId}', [PaymentController::class, 'update'])->name('payment.update');
     });
 });
 
