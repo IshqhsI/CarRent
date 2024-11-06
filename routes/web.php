@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 Route::name('front.')->group(function () {
     Route::get('/', [LandingController::class, 'index'])->name('index');
+    Route::get('/detail/{slug}', [LandingController::class, 'show'])->name('detail');
 });
 
 Route::prefix('/admin')->name('admin.')->middleware([
